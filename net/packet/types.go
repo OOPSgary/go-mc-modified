@@ -7,8 +7,10 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/Tnze/go-mc/nbt"
+	"github.com/OOPSgary/go-mc-modified/nbt"
 )
+
+const MaxLength = 1024 * 16
 
 // A Field is both FieldEncoder and FieldDecoder
 type Field interface {
@@ -124,7 +126,9 @@ func (s *String) ReadFrom(r io.Reader) (n int64, err error) {
 		return nn, err
 	}
 	n += nn
-
+	if l > MaxLength {
+		return n, errors.New("reach String Limit")
+	}
 	bs := make([]byte, l)
 	if _, err := io.ReadFull(r, bs); err != nil {
 		return n, err
@@ -553,6 +557,9 @@ func (b *ByteArray) ReadFrom(r io.Reader) (n int64, err error) {
 	if err != nil {
 		return n1, err
 	}
+	if Len > MaxLength {
+		return n, errors.New("reach String Limit")
+	}
 	if cap(*b) < int(Len) {
 		*b = make(ByteArray, Len)
 	} else {
@@ -602,6 +609,9 @@ func (b *BitSet) ReadFrom(r io.Reader) (n int64, err error) {
 	n, err = Len.ReadFrom(r)
 	if err != nil {
 		return
+	}
+	if Len > MaxLength {
+		return n, errors.New("reach String Limit")
 	}
 	if int(Len) > cap(*b) {
 		*b = make([]int64, Len)

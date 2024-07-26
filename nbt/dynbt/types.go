@@ -21,7 +21,7 @@ import (
 	"encoding/binary"
 	"math"
 
-	"github.com/Tnze/go-mc/nbt"
+	"github.com/OOPSgary/go-mc-modified/nbt"
 )
 
 type Value struct {

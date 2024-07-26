@@ -1,4 +1,4 @@
-module github.com/Tnze/go-mc
+module github.com/OOPSgary/go-mc-modified
 
 go 1.20
 

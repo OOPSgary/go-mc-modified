@@ -10,7 +10,7 @@ import (
 	"net/http"
 	"time"
 
-	pk "github.com/Tnze/go-mc/net/packet"
+	pk "github.com/OOPSgary/go-mc-modified/net/packet"
 )
 
 var ServicesURL = "https://api.minecraftservices.com"

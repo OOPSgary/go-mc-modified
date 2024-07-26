@@ -6,7 +6,7 @@ import (
 	"io"
 	"testing"
 
-	pk "github.com/Tnze/go-mc/net/packet"
+	pk "github.com/OOPSgary/go-mc-modified/net/packet"
 )
 
 //go:embed joingame_test.bin
