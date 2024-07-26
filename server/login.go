@@ -7,13 +7,13 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"github.com/Tnze/go-mc/chat"
-	"github.com/Tnze/go-mc/data/packetid"
-	"github.com/Tnze/go-mc/net"
-	pk "github.com/Tnze/go-mc/net/packet"
-	"github.com/Tnze/go-mc/offline"
-	"github.com/Tnze/go-mc/server/auth"
-	"github.com/Tnze/go-mc/yggdrasil/user"
+	"github.com/OOPSgary/go-mc-modified/chat"
+	"github.com/OOPSgary/go-mc-modified/data/packetid"
+	"github.com/OOPSgary/go-mc-modified/net"
+	pk "github.com/OOPSgary/go-mc-modified/net/packet"
+	"github.com/OOPSgary/go-mc-modified/offline"
+	"github.com/OOPSgary/go-mc-modified/server/auth"
+	"github.com/OOPSgary/go-mc-modified/yggdrasil/user"
 
 	"github.com/google/uuid"
 )

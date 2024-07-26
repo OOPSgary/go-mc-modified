@@ -15,7 +15,7 @@ import (
 	"regexp"
 	"strings"
 
-	en_us "github.com/Tnze/go-mc/data/lang/en-us"
+	en_us "github.com/OOPSgary/go-mc-modified/data/lang/en-us"
 )
 
 const (

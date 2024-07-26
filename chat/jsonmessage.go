@@ -6,7 +6,7 @@ import (
 	"errors"
 	"io"
 
-	pk "github.com/Tnze/go-mc/net/packet"
+	pk "github.com/OOPSgary/go-mc-modified/net/packet"
 )
 
 // JsonMessage is Message, unless when it is going to be Json instead of NBT
