@@ -34,7 +34,7 @@ type (
 const verifyTokenLen = 16
 
 // Encrypt a connection, with authentication
-func Encrypt(conn *net.Conn, name string, serverKey *rsa.PrivateKey) (*Resp, error) {
+func Encrypt(conn *net.Conn, name string, serverKey *rsa.PrivateKey, protocol_version int32) (*Resp, error) {
 	publicKey, err := x509.MarshalPKIXPublicKey(&serverKey.PublicKey)
 	if err != nil {
 		return nil, err
@@ -47,7 +47,7 @@ func Encrypt(conn *net.Conn, name string, serverKey *rsa.PrivateKey) (*Resp, err
 	}
 
 	// encryption request
-	err = encryptionRequest(conn, publicKey, verifyToken)
+	err = encryptionRequest(conn, publicKey, verifyToken, protocol_version)
 	if err != nil {
 		return nil, err
 	}
@@ -77,7 +77,16 @@ func Encrypt(conn *net.Conn, name string, serverKey *rsa.PrivateKey) (*Resp, err
 	return resp, nil
 }
 
-func encryptionRequest(conn *net.Conn, publicKey, verifyToken []byte) error {
+func encryptionRequest(conn *net.Conn, publicKey, verifyToken []byte, protocol_version int32) error {
+	if protocol_version > 766 {
+		return conn.WritePacket(pk.Marshal(
+			packetid.ClientboundLoginHello,
+			pk.String(""),
+			pk.ByteArray(publicKey),
+			pk.ByteArray(verifyToken),
+			pk.Boolean(true),
+		))
+	}
 	return conn.WritePacket(pk.Marshal(
 		packetid.ClientboundLoginHello,
 		pk.String(""),
