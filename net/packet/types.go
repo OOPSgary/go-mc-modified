@@ -1,6 +1,7 @@
 package packet
 
 import (
+	"encoding/binary"
 	"errors"
 	"io"
 	"math"
@@ -262,6 +263,7 @@ func (v VarInt) WriteTo(w io.Writer) (n int64, err error) {
 
 // WriteToBytes encodes the VarInt into buf and returns the number of bytes written.
 // If the buffer is too small, WriteToBytes will panic.
+/*
 func (v VarInt) WriteToBytes(buf []byte) int {
 	num := uint32(v)
 	i := 0
@@ -279,7 +281,35 @@ func (v VarInt) WriteToBytes(buf []byte) int {
 	}
 	return i
 }
-
+*/
+func (v VarInt) WriteToBytes(buf []byte) int {
+	// https://steinborn.me/posts/performance/how-fast-can-you-write-a-varint/
+	num := uint32(v)
+	if num&0xFFFFFF80 == 0 {
+		buf[0] = byte(num)
+		return 1
+	} else if num&0xFFFFC000 == 0 {
+		result := uint16((num&0x7F|0x80)<<8 | (num >> 7))
+		binary.BigEndian.PutUint16(buf, result)
+		return 2
+	} else if num&0xFFE00000 == 0 {
+		buf[2] = byte(num >> 14)
+		startingBytes := uint16((num&0x7F|0x80)<<8 | ((num>>7)&0x7F | 0x80))
+		binary.BigEndian.PutUint16(buf, startingBytes)
+		return 3
+	} else if num&0xF0000000 == 0 {
+		result := (num&0x7F|0x80)<<24 | (((num>>7)&0x7F | 0x80) << 16) |
+			((num>>14)&0x7F|0x80)<<8 | (num >> 21)
+		binary.BigEndian.PutUint32(buf, result)
+		return 4
+	} else {
+		buf[4] = byte(num >> 28)
+		startingBytes := (num&0x7F|0x80)<<24 | ((num>>7)&0x7F|0x80)<<16 |
+			((num>>14)&0x7F|0x80)<<8 | ((num>>21)&0x7F | 0x80)
+		binary.BigEndian.PutUint32(buf, startingBytes)
+		return 5
+	}
+}
 func (v *VarInt) ReadFrom(r io.Reader) (n int64, err error) {
 	var V uint32
 	var num, n2 int64
