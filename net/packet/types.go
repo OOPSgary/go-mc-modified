@@ -120,7 +120,6 @@ func (s String) WriteTo(w io.Writer) (int64, error) {
 
 func (s *String) ReadFrom(r io.Reader) (n int64, err error) {
 	var l VarInt // String length
-
 	nn, err := l.ReadFrom(r)
 	if err != nil {
 		return nn, err
