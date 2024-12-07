@@ -120,13 +120,12 @@ func (s String) WriteTo(w io.Writer) (int64, error) {
 
 func (s *String) ReadFrom(r io.Reader) (n int64, err error) {
 	var l VarInt // String length
-
 	nn, err := l.ReadFrom(r)
 	if err != nil {
 		return nn, err
 	}
 	n += nn
-	if l > MaxLength {
+	if l > MaxLength || l <= 0 {
 		return n, errors.New("reach String Limit")
 	}
 	bs := make([]byte, l)
@@ -557,7 +556,7 @@ func (b *ByteArray) ReadFrom(r io.Reader) (n int64, err error) {
 	if err != nil {
 		return n1, err
 	}
-	if Len > MaxLength {
+	if Len > MaxLength || Len <= 0 {
 		return n, errors.New("reach String Limit")
 	}
 	if cap(*b) < int(Len) {
@@ -610,7 +609,7 @@ func (b *BitSet) ReadFrom(r io.Reader) (n int64, err error) {
 	if err != nil {
 		return
 	}
-	if Len > MaxLength {
+	if Len > MaxLength || Len <= 0 {
 		return n, errors.New("reach String Limit")
 	}
 	if int(Len) > cap(*b) {
