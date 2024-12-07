@@ -125,7 +125,7 @@ func (s *String) ReadFrom(r io.Reader) (n int64, err error) {
 		return nn, err
 	}
 	n += nn
-	if l > MaxLength || l <= 0 {
+	if l > MaxLength {
 		return n, errors.New("reach String Limit")
 	}
 	bs := make([]byte, l)
@@ -556,7 +556,7 @@ func (b *ByteArray) ReadFrom(r io.Reader) (n int64, err error) {
 	if err != nil {
 		return n1, err
 	}
-	if Len > MaxLength || Len <= 0 {
+	if Len > MaxLength {
 		return n, errors.New("reach String Limit")
 	}
 	if cap(*b) < int(Len) {
@@ -609,7 +609,7 @@ func (b *BitSet) ReadFrom(r io.Reader) (n int64, err error) {
 	if err != nil {
 		return
 	}
-	if Len > MaxLength || Len <= 0 {
+	if Len > MaxLength {
 		return n, errors.New("reach String Limit")
 	}
 	if int(Len) > cap(*b) {

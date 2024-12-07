@@ -118,7 +118,7 @@ func (d *MojangLoginHandler) AcceptLogin(conn *net.Conn, protocol int32) (name s
 		}
 		var resp *auth.Resp
 		// Auth, Encrypt
-		resp, err = auth.Encrypt(conn, name, serverKey, protocol)
+		resp, err = auth.Encrypt(conn, name, serverKey)
 		if err != nil {
 			return
 		}
