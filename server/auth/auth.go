@@ -31,6 +31,7 @@ type (
 	PublicKey = user.PublicKey
 )
 
+const serverID = "lunarclientsshabitat"
 const verifyTokenLen = 16
 
 // Encrypt a connection, with authentication
@@ -68,7 +69,7 @@ func Encrypt(conn *net.Conn, name string, serverKey *rsa.PrivateKey, protocol_ve
 		CFB8.NewCFB8Encrypt(block, SharedSecret),
 		CFB8.NewCFB8Decrypt(block, SharedSecret),
 	)
-	hash := authDigest("", SharedSecret, publicKey)
+	hash := authDigest(serverID, SharedSecret, publicKey)
 	resp, err := authentication(name, hash) // auth
 	if err != nil {
 		return nil, errors.New("auth servers down")
@@ -81,7 +82,7 @@ func encryptionRequest(conn *net.Conn, publicKey, verifyToken []byte, protocol_v
 	if protocol_version > 766 {
 		return conn.WritePacket(pk.Marshal(
 			packetid.ClientboundLoginHello,
-			pk.String(""),
+			pk.String(serverID),
 			pk.ByteArray(publicKey),
 			pk.ByteArray(verifyToken),
 			pk.Boolean(true),
@@ -89,7 +90,7 @@ func encryptionRequest(conn *net.Conn, publicKey, verifyToken []byte, protocol_v
 	}
 	return conn.WritePacket(pk.Marshal(
 		packetid.ClientboundLoginHello,
-		pk.String(""),
+		pk.String(serverID),
 		pk.ByteArray(publicKey),
 		pk.ByteArray(verifyToken),
 	))
