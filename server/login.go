@@ -100,11 +100,18 @@ func (d *MojangLoginHandler) AcceptLogin(conn *net.Conn, protocol int32) (name s
 		err = wrongPacketErr{expect: int32(packetid.ServerboundLoginHello), get: p.ID}
 		return
 	}
+	//versions like 1.8.9 dont contain uuid in this packet
+	if protocol > 766 {
+		err = p.Scan(
+			(*pk.String)(&name), // decode username as pk.String
+			(*pk.UUID)(&id),
+		)
+	} else {
+		err = p.Scan(
+			(*pk.String)(&name), // decode username as pk.String
+		)
+	}
 
-	err = p.Scan(
-		(*pk.String)(&name), // decode username as pk.String
-		(*pk.UUID)(&id),
-	)
 	if err != nil {
 		return
 	}

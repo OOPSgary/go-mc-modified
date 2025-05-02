@@ -31,7 +31,7 @@ type (
 	PublicKey = user.PublicKey
 )
 
-const serverID = "lunarclientsshabitat"
+const serverID = ""
 const verifyTokenLen = 16
 
 // Encrypt a connection, with authentication
