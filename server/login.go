@@ -158,12 +158,20 @@ func (d *MojangLoginHandler) AcceptLogin(conn *net.Conn, protocol int32) (name s
 		}
 	}
 	// send login success
-	err = conn.WritePacket(pk.Marshal(
-		packetid.ClientboundLoginGameProfile,
-		pk.UUID(id),
-		pk.String(name),
-		pk.Array(properties),
-	))
+	if protocol > 759 {
+		err = conn.WritePacket(pk.Marshal(
+			packetid.ClientboundLoginGameProfile,
+			pk.UUID(id),
+			pk.String(name),
+			pk.Array(properties),
+		))
+	} else {
+		err = conn.WritePacket(pk.Marshal(
+			packetid.ClientboundLoginGameProfile,
+			pk.UUID(id),
+			pk.String(name),
+		))
+	}
 	if err != nil {
 		return
 	}
